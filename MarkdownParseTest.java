@@ -4,7 +4,9 @@ import org.junit.*;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.List;
+import java.util.*;
+import java.nio.file.NoSuchFileException;
+
 
 public class MarkdownParseTest {
     @Test
@@ -36,6 +38,42 @@ public class MarkdownParseTest {
         String contents= "[link title](   a.com   )";
         List<String> expect = List.of("a.com");
         assertEquals(expect, MarkdownParse.getLinks(contents));
+    }
+    @Test
+    public void testSnip1() throws IOException, NoSuchFileException {
+
+        ArrayList<String> correctOutput = new ArrayList<>();
+        correctOutput.addAll(Arrays.asList("`google.com","google.com","ucsd.edu"));
+        Path fileName= Path.of("lab8-snip1.md");
+        // read the file contents into a string
+	    String contents = Files.readString(fileName);
+        // run getLinks on the contents of the file
+        ArrayList<String> links = MarkdownParse.getLinks(contents);
+        assertEquals(correctOutput,links);
+    }
+    @Test
+    public void testSnip2() throws IOException, NoSuchFileException {
+
+        ArrayList<String> correctOutput = new ArrayList<>();
+        correctOutput.addAll(Arrays.asList("a.com(())","example.com"));
+        Path fileName= Path.of("lab8-snip2.md");
+        // read the file contents into a string
+	    String contents = Files.readString(fileName);
+        // run getLinks on the contents of the file
+        ArrayList<String> links = MarkdownParse.getLinks(contents);
+        assertEquals(correctOutput,links);
+    }
+    @Test
+    public void testSnip3() throws IOException, NoSuchFileException {
+
+        ArrayList<String> correctOutput = new ArrayList<>();
+        correctOutput.addAll(Arrays.asList("https://ucsd-cse15l-w22.github.io/"));
+        Path fileName= Path.of("lab8-snip3.md");
+        // read the file contents into a string
+	    String contents = Files.readString(fileName);
+        // run getLinks on the contents of the file
+        ArrayList<String> links = MarkdownParse.getLinks(contents);
+        assertEquals(correctOutput,links);
     }
 
 }
